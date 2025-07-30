@@ -1,6 +1,6 @@
 package response
 
-type UserRequest struct {
+type UserResponse struct {
 	Id       string `json:"id"`
 	Email    string `json:"email" binding:"required,email"`
 	Username string `json:"username"`
