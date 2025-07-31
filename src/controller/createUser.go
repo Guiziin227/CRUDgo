@@ -6,6 +6,8 @@ import (
 	"github.com/guiziin227/CRUDgo/src/configuration/validation"
 	"github.com/guiziin227/CRUDgo/src/controller/model/request"
 	"github.com/guiziin227/CRUDgo/src/model"
+	"github.com/guiziin227/CRUDgo/src/model/service"
+
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -15,7 +17,7 @@ var (
 )
 
 func CreateUser(c *gin.Context) {
-	logger.Info("Initializing CreateUser controller", zap.String("method", "CreateUser"))
+	logger.Info("Initializing CreateUser controller", zap.String("Controller", "CreateUser"))
 	var userRequest request.UserRequest
 
 	if err := c.ShouldBindJSON(&userRequest); err != nil {
@@ -32,13 +34,14 @@ func CreateUser(c *gin.Context) {
 		userRequest.Age,
 	)
 
-	if err := domain.CreateUser(); err != nil {
-		logger.Error("Error trying to create user", err, zap.String("method", "CreateUser"))
+	service := service.NewUserDomainService()
+	if err := service.CreateUser(domain); err != nil {
+		logger.Error("Error trying to create user", err, zap.String("Controller", "CreateUser"))
 		c.JSON(err.Code, err)
 		return
 	}
 
-	logger.Info("Create user successfully", zap.String("method", "CreateUser"))
+	logger.Info("Create user successfully", zap.String("Controller", "CreateUser"))
 
 	c.String(http.StatusOK, "")
 }
