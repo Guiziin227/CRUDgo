@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (ud *UserDomain) CreateUser() *c_err.CErr {
+func (ud *userDomain) CreateUser() *c_err.CErr {
 
 	logger.Info("Creating user in UserDomain", zap.String("journey", "CreateUser"))
 
