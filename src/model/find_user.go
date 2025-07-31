@@ -1,7 +1,0 @@
-package model
-
-import "github.com/guiziin227/CRUDgo/src/configuration/c_err"
-
-func (ud *userDomain) FindUser(string) *c_err.CErr {
-	return nil
-}
