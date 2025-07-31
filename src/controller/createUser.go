@@ -6,8 +6,7 @@ import (
 	"github.com/guiziin227/CRUDgo/src/configuration/validation"
 	"github.com/guiziin227/CRUDgo/src/controller/model/request"
 	"github.com/guiziin227/CRUDgo/src/model"
-	"github.com/guiziin227/CRUDgo/src/model/service"
-
+	"github.com/guiziin227/CRUDgo/src/view"
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -16,7 +15,7 @@ var (
 	UserDomainInterface model.UserDomainInterface
 )
 
-func CreateUser(c *gin.Context) {
+func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	logger.Info("Initializing CreateUser controller", zap.String("Controller", "CreateUser"))
 	var userRequest request.UserRequest
 
@@ -34,8 +33,7 @@ func CreateUser(c *gin.Context) {
 		userRequest.Age,
 	)
 
-	service := service.NewUserDomainService()
-	if err := service.CreateUser(domain); err != nil {
+	if err := uc.service.CreateUser(domain); err != nil {
 		logger.Error("Error trying to create user", err, zap.String("Controller", "CreateUser"))
 		c.JSON(err.Code, err)
 		return
@@ -43,5 +41,5 @@ func CreateUser(c *gin.Context) {
 
 	logger.Info("Create user successfully", zap.String("Controller", "CreateUser"))
 
-	c.String(http.StatusOK, "")
+	c.JSON(http.StatusOK, view.ConvertDomainToResponse(domain))
 }
