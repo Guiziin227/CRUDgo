@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/guiziin227/CRUDgo/src/configuration/db/mongodb"
 	"github.com/guiziin227/CRUDgo/src/configuration/logger"
 	"github.com/guiziin227/CRUDgo/src/controller"
 	"github.com/guiziin227/CRUDgo/src/controller/routes"
@@ -17,8 +16,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
-	mongodb.InitConnection()
 
 	//Init dependencies
 	service := service.NewUserDomainService()
