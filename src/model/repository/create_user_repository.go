@@ -29,4 +29,7 @@ func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (mode
 	}
 
 	userDomain.SetID(result.InsertedID.(string))
+
+	logger.Info("User created successfully", zap.String("userID", userDomain.GetID()), zap.String("email", userDomain.GetEmail()))
+	return userDomain, nil
 }
