@@ -5,6 +5,8 @@ import (
 	"github.com/guiziin227/CRUDgo/src/configuration/c_err"
 	"github.com/guiziin227/CRUDgo/src/configuration/logger"
 	"github.com/guiziin227/CRUDgo/src/model"
+	"github.com/guiziin227/CRUDgo/src/model/repository/entity/converter"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.uber.org/zap"
 	"os"
 )
@@ -18,18 +20,14 @@ func (ur *userRepository) CreateUser(userDomain model.UserDomainInterface) (mode
 
 	collection := ur.databaseConnection.Collection(collection_name)
 
-	value, err := userDomain.GetJSONValue()
-	if err != nil {
-		return nil, c_err.NewInternalServerErr("Error getting JSON value from user domain")
-	}
+	value := converter.ConvertDomainToEntity(userDomain)
 
 	result, err := collection.InsertOne(context.Background(), value)
 	if err != nil {
 		return nil, c_err.NewInternalServerErr("Error getting JSON value from user domain")
 	}
 
-	userDomain.SetID(result.InsertedID.(string))
+	value.ID = result.InsertedID.(bson.ObjectID)
 
-	logger.Info("User created successfully", zap.String("userID", userDomain.GetID()), zap.String("email", userDomain.GetEmail()))
-	return userDomain, nil
+	return converter.ConvertEntityToDomain(value), nil
 }
